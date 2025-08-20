@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { io } from 'socket.io-client';
 
 export async function POST(req: Request): Promise<Response> {
@@ -25,3 +26,4 @@ export async function POST(req: Request): Promise<Response> {
     return new Response(JSON.stringify({ error: 'Internal Server Error' }), { status: 500 });
   }
 }
+
