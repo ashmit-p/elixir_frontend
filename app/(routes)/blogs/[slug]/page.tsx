@@ -7,9 +7,10 @@ import { Suspense } from 'react';
 import { Metadata } from 'next';
 import { ResolvingMetadata } from 'next';
 
-type BlogPageParams = {
-  params: { slug: string }
-}
+type BlogPageProps = {
+  params: { slug: string };
+  searchParams?: URLSearchParams;
+};
 
 type Blog = {
   title: string
@@ -70,7 +71,7 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 }
 
 // Generate metadata for better SEO and performance
-export async function generateMetadata({ params }: BlogPageParams, parent?: ResolvingMetadata) {
+export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
   const { blog } = await getBlogBySlug(params.slug);
   if (!blog) return { title: 'Blog Not Found' };
   return {
@@ -91,7 +92,7 @@ export async function generateMetadata({ params }: BlogPageParams, parent?: Reso
   };
 }
 
-export default async function BlogPage({ params }) {
+export default async function BlogPage({ params }: BlogPageProps) {
   try {
   const { blog } = await getBlogBySlug(params.slug)
     
@@ -212,6 +213,7 @@ export default async function BlogPage({ params }) {
     return notFound()
   }
 }
+
 
 
 
