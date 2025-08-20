@@ -1,51 +1,28 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFound } from 'next/navigation'
 import { markdownToSafeHTML } from '@/lib/markdown-to-text';
 import { Calendar, User, Clock } from 'lucide-react';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
-import { ResolvingMetadata } from 'next';
 
+// Define proper types
 type BlogPageProps = {
-  params: { slug: string };
-  searchParams?: URLSearchParams;
-};
-
-type Blog = {
-  title: string
-  description: string
-  content: string
-  iframe_link?: string
-  written_by: string
-  created_at: string
+  params: Promise<{ slug: string }>
 }
 
 // Optimize fetch with proper caching
-// async function getBlogBySlug(slug: string) {
-//   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blogs/${slug}`, {
-//     cache: 'force-cache', // Enable caching for better performance
-//     next: { revalidate: 3600 } // Revalidate every hour
-//   })
-  
-//   if (!res.ok) {
-//     throw new Error('Failed to fetch blog')
-//   }
-  
-//   return res.json()
-// }
-async function getBlogBySlug(slug: string): Promise<{ blog: Blog | null }> {
+async function getBlogBySlug(slug: string) {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blogs/${slug}`, {
     cache: 'force-cache',
-    next: { revalidate: 3600 },
+    next: { revalidate: 3600 }
   })
 
   if (!res.ok) {
-    return { blog: null }
+    throw new Error('Failed to fetch blog')
   }
-
-  const data = await res.json()
-  return { blog: data.blog ?? null }
+  
+  return res.json()
 }
 
 // Extract common CSS classes to reduce bundle size
@@ -64,7 +41,7 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
         frameBorder="0"
         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
         allowFullScreen
-        loading="lazy" // Native lazy loading
+        loading="lazy"
       />
     </div>
   )
@@ -72,29 +49,43 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 
 // Generate metadata for better SEO and performance
 export async function generateMetadata({ params }: BlogPageProps): Promise<Metadata> {
-  const { blog } = await getBlogBySlug(params.slug);
-  if (!blog) return { title: 'Blog Not Found' };
-  return {
-    title: blog.title,
-    description: blog.description,
-    openGraph: {
+  try {
+    const resolvedParams = await params;
+    const { blog } = await getBlogBySlug(resolvedParams.slug)
+    
+    if (!blog) {
+      return {
+        title: 'Blog Not Found',
+      }
+    }
+
+    return {
       title: blog.title,
       description: blog.description,
-      type: 'article',
-      publishedTime: blog.created_at,
-      authors: [blog.written_by],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title: blog.title,
-      description: blog.description,
-    },
-  };
+      openGraph: {
+        title: blog.title,
+        description: blog.description,
+        type: 'article',
+        publishedTime: blog.created_at,
+        authors: [blog.written_by],
+      },
+      twitter: {
+        card: 'summary_large_image',
+        title: blog.title,
+        description: blog.description,
+      },
+    }
+  } catch {
+    return {
+      title: 'Blog Not Found',
+    }
+  }
 }
 
 export default async function BlogPage({ params }: BlogPageProps) {
   try {
-  const { blog } = await getBlogBySlug(params.slug)
+    const resolvedParams = await params; // Await the params Promise
+    const { blog } = await getBlogBySlug(resolvedParams.slug)
     
     if (!blog) return notFound()
     
@@ -213,12 +204,3 @@ export default async function BlogPage({ params }: BlogPageProps) {
     return notFound()
   }
 }
-
-
-
-
-
-
-
-
-
