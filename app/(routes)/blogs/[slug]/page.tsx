@@ -4,18 +4,46 @@ import { Calendar, User, Clock } from 'lucide-react';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 
+type Blog = {
+  title: string
+  description: string
+  content: string
+  iframe_link?: string
+  written_by: string
+  created_at: string
+}
+
 // Optimize fetch with proper caching
-async function getBlogBySlug(slug: string) {
+// async function getBlogBySlug(slug: string) {
+//   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blogs/${slug}`, {
+//     cache: 'force-cache', // Enable caching for better performance
+//     next: { revalidate: 3600 } // Revalidate every hour
+//   })
+  
+//   if (!res.ok) {
+//     throw new Error('Failed to fetch blog')
+//   }
+  
+//   return res.json()
+// }
+async function getBlogBySlug(slug: string): Promise<{ blog: Blog | null }> {
   const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blogs/${slug}`, {
-    cache: 'force-cache', // Enable caching for better performance
-    next: { revalidate: 3600 } // Revalidate every hour
+    cache: 'force-cache',
+    next: { revalidate: 3600 },
   })
-  
+
   if (!res.ok) {
-    throw new Error('Failed to fetch blog')
+    return { blog: null }
   }
-  
-  return res.json()
+
+  const data = await res.json()
+  return { blog: data.blog ?? null }
+}
+
+type PageProps = {
+  params: {
+    slug: string
+  }
 }
 
 // Extract common CSS classes to reduce bundle size
@@ -41,7 +69,7 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 }
 
 // Generate metadata for better SEO and performance
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   try {
     const { blog } = await getBlogBySlug(params.slug)
     
@@ -74,7 +102,7 @@ export async function generateMetadata({ params }: { params: { slug: string } })
   }
 }
 
-export default async function BlogPage({ params }: { params: { slug: string } }) {
+export default async function BlogPage({ params }: PageProps) {
   try {
     const { blog } = await getBlogBySlug(params.slug)
     
@@ -195,3 +223,4 @@ export default async function BlogPage({ params }: { params: { slug: string } })
     return notFound()
   }
 }
+
