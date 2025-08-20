@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { notFound } from 'next/navigation'
 import { markdownToSafeHTML } from '@/lib/markdown-to-text';
 import { Calendar, User, Clock } from 'lucide-react';
@@ -206,6 +207,7 @@ export default async function BlogPage({ params }) {
     return notFound()
   }
 }
+
 
 
 
