@@ -1,11 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(request: NextRequest) {
   const supabase = supabaseServer();
+
+  const url = new URL(request.url);
+  const slug = url.pathname.split('/').pop(); 
+
+  if (!slug) {
+    return NextResponse.json({ error: 'Missing slug' }, { status: 400 });
+  }
 
   const {
     data: { user },
@@ -14,7 +18,7 @@ export async function GET(
   const { data: blog, error } = await supabase
     .from('blogs')
     .select('*')
-    .eq('slug', params.slug)
+    .eq('slug', slug)
     .single();
 
   if (error) {
