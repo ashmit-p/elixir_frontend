@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { notFound } from 'next/navigation'
 import { markdownToSafeHTML } from '@/lib/markdown-to-text';
 import { Calendar, User, Clock } from 'lucide-react';
@@ -218,6 +219,7 @@ export default async function BlogPage({ params }: { params: any }) {
     return notFound()
   }
 }
+
 
 
 
