@@ -1,12 +1,8 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { getBlogSubmissionBySlug } from '@/lib/blogSubmission';
 
-interface PageProps {
-  params: {
-    slug: string;
-  };
-}
-
-export default async function ReviewPage({ params }: PageProps) {
+export default async function ReviewPage({ params }) {
 
   const submission = await getBlogSubmissionBySlug(params.slug);
   // console.log("SLUG", params.slug);
@@ -26,3 +22,4 @@ export default async function ReviewPage({ params }: PageProps) {
     </div>
   );
 }
+
