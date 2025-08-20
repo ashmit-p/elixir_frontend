@@ -40,12 +40,6 @@ async function getBlogBySlug(slug: string): Promise<{ blog: Blog | null }> {
   return { blog: data.blog ?? null }
 }
 
-type PageProps = {
-  params: {
-    slug: string
-  }
-}
-
 // Extract common CSS classes to reduce bundle size
 const cardStyles = "bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/30 dark:border-slate-700/30"
 const gradientBg = "absolute inset-0 rounded-3xl"
@@ -69,7 +63,7 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 }
 
 // Generate metadata for better SEO and performance
-export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
   try {
     const { blog } = await getBlogBySlug(params.slug)
     
@@ -102,7 +96,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   }
 }
 
-export default async function BlogPage({ params }: PageProps) {
+export default async function BlogPage({ params }: { params: { slug: string } }) {
+  const { slug } = params
   try {
     const { blog } = await getBlogBySlug(params.slug)
     
@@ -223,4 +218,5 @@ export default async function BlogPage({ params }: PageProps) {
     return notFound()
   }
 }
+
 
