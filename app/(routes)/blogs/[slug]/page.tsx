@@ -64,43 +64,30 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 }
 
 // Generate metadata for better SEO and performance
-export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-  try {
-    const { blog } = await getBlogBySlug(params.slug)
-    
-    if (!blog) {
-      return {
-        title: 'Blog Not Found',
-      }
-    }
-
-    return {
+export async function generateMetadata({ params }) {
+  const { blog } = await getBlogBySlug(params.slug);
+  if (!blog) return { title: 'Blog Not Found' };
+  return {
+    title: blog.title,
+    description: blog.description,
+    openGraph: {
       title: blog.title,
       description: blog.description,
-      openGraph: {
-        title: blog.title,
-        description: blog.description,
-        type: 'article',
-        publishedTime: blog.created_at,
-        authors: [blog.written_by],
-      },
-      twitter: {
-        card: 'summary_large_image',
-        title: blog.title,
-        description: blog.description,
-      },
-    }
-  } catch {
-    return {
-      title: 'Blog Not Found',
-    }
-  }
+      type: 'article',
+      publishedTime: blog.created_at,
+      authors: [blog.written_by],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: blog.title,
+      description: blog.description,
+    },
+  };
 }
 
-export default async function BlogPage({ params }: { params: any }) {
-  const { slug } = params
+export default async function BlogPage({ params }) {
   try {
-  const { blog } = await getBlogBySlug(slug)
+  const { blog } = await getBlogBySlug(params.slug)
     
     if (!blog) return notFound()
     
@@ -219,6 +206,7 @@ export default async function BlogPage({ params }: { params: any }) {
     return notFound()
   }
 }
+
 
 
 
