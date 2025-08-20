@@ -1,20 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supabaseServer } from '@/lib/supabase/server';
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { slug: string } }
-) {
+export async function GET(req: NextRequest) {
   const supabase = supabaseServer();
 
-//   const {
-//     data: { user },
-//   } = await supabase.auth.getUser();
+  const url = new URL(req.url);
+  const segments = url.pathname.split('/');
+  const slug = segments.pop(); 
+
+  if (!slug) {
+    return NextResponse.json({ error: 'Missing slug' }, { status: 400 });
+  }
 
   const { data: blogs, error } = await supabase
     .from('blogs')
     .select('*')
-    .eq('written_by', params.slug)
+    .eq('written_by', slug)
     .order('created_at', { ascending: false });
 
   if (error) {
