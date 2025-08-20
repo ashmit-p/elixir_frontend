@@ -97,7 +97,6 @@ export async function generateMetadata({ params }: { params: { slug: string } })
 }
 
 export default async function BlogPage({ params }: { params: { slug: string } }) {
-  const { slug } = params
   try {
     const { blog } = await getBlogBySlug(params.slug)
     
@@ -218,5 +217,6 @@ export default async function BlogPage({ params }: { params: { slug: string } })
     return notFound()
   }
 }
+
 
 
