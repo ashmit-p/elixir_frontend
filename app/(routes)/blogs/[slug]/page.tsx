@@ -5,6 +5,11 @@ import { markdownToSafeHTML } from '@/lib/markdown-to-text';
 import { Calendar, User, Clock } from 'lucide-react';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import { ResolvingMetadata } from 'next';
+
+type BlogPageParams = {
+  params: { slug: string }
+}
 
 type Blog = {
   title: string
@@ -65,7 +70,7 @@ function LazyIframe({ src, title }: { src: string; title: string }) {
 }
 
 // Generate metadata for better SEO and performance
-export async function generateMetadata({ params }) {
+export async function generateMetadata({ params }: BlogPageParams, parent?: ResolvingMetadata) {
   const { blog } = await getBlogBySlug(params.slug);
   if (!blog) return { title: 'Blog Not Found' };
   return {
@@ -207,6 +212,7 @@ export default async function BlogPage({ params }) {
     return notFound()
   }
 }
+
 
 
 
