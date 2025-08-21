@@ -15,7 +15,7 @@ type BlogPageProps = {
 async function getBlogBySlug(slug: string) {
   const baseUrl = "https://elixirfrontend-production.up.railway.app";
   const redisurl = process.env.REDIS_URL;
-  console.log('REDIS_URL':, redisurl);
+  console.log('REDIS_URL:', redisurl);
   const botid = process.env.BOT_ID;
   console.log('BOT_ID:', botid);
   const res = await fetch(`${baseUrl}/api/blogs/${slug}`, {
@@ -209,6 +209,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
     return notFound()
   }
 }
+
 
 
 
