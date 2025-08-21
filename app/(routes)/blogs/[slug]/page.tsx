@@ -13,7 +13,7 @@ type BlogPageProps = {
 
 // Optimize fetch with proper caching
 async function getBlogBySlug(slug: string) {
-  const baseUrl = process.env.SITE_URL;
+  const baseUrl = "https://elixirfrontend-production.up.railway.app";
   console.log('SITE_URL:', baseUrl);
   const res = await fetch(`${baseUrl}/api/blogs/${slug}`, {
     cache: 'force-cache',
@@ -206,6 +206,7 @@ export default async function BlogPage({ params }: BlogPageProps) {
     return notFound()
   }
 }
+
 
 
 
