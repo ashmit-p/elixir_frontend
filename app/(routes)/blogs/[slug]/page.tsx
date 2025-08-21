@@ -13,7 +13,7 @@ type BlogPageProps = {
 
 // Optimize fetch with proper caching
 async function getBlogBySlug(slug: string) {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL}/api/blogs/${slug}`, {
+  const res = await fetch(`/api/blogs/${slug}`, {
     cache: 'force-cache',
     next: { revalidate: 3600 }
   })
@@ -204,3 +204,4 @@ export default async function BlogPage({ params }: BlogPageProps) {
     return notFound()
   }
 }
+
