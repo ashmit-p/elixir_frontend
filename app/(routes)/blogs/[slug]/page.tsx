@@ -14,6 +14,7 @@ type BlogPageProps = {
 // Optimize fetch with proper caching
 async function getBlogBySlug(slug: string) {
   const baseUrl = process.env.SITE_URL;
+  console.log('SITE_URL:', baseUrl);
   const res = await fetch(`${baseUrl}/api/blogs/${slug}`, {
     cache: 'force-cache',
     next: { revalidate: 3600 }
@@ -205,5 +206,6 @@ export default async function BlogPage({ params }: BlogPageProps) {
     return notFound()
   }
 }
+
 
 
