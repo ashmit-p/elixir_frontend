@@ -67,75 +67,125 @@ const handleResetPassword = async () => {
   }
 
    return (
-    <div className='min-h-screen bg-gradient-to-br from-emerald-800 via-emerald-700 to-emerald-90'>
-      <form onSubmit={handleAuth} className="space-y-4 max-w-md mx-auto pt-52">
-        <h2 className="text-2xl font-bold">{type === 'login' ? 'Login' : 'Sign Up'}</h2>
-        {type === 'signup' && (
-          <input
-            type="text"
-            placeholder="Username"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            required
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-        )}
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-        <input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-        />
-        {type === 'signup' && (
-          <input
-            type="password"
-            placeholder="Confirm Password"
-            value={confirmPassword}
-            onChange={e => setConfirmPassword(e.target.value)}
-            required
-            className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-          />
-        )}
-        <div className="flex flex-col gap-2">
-          <button 
-            type="submit" 
-            className="cursor-pointer bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition-colors"
-          >
-            {type === 'login' ? 'Login' : 'Sign Up'}
-          </button>
-          {type === 'login' && (
+    <div className='min-h-screen pt-24 bg-gradient-to-br from-slate-50 via-purple-50 to-pink-50 dark:from-slate-900 dark:via-purple-950 dark:to-slate-900 flex items-center justify-center p-4'>
+      <div className="w-full max-w-md">
+        <div className="bg-white/80 dark:bg-slate-800/80 backdrop-blur-xl rounded-3xl border border-white/20 dark:border-slate-700/20 shadow-2xl p-6 sm:p-8">
+          {/* Header */}
+          <div className="text-center mb-8">
+            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 dark:text-white mb-2">
+              {type === 'login' ? 'Welcome Back' : 'Create Account'}
+            </h2>
+            <p className="text-slate-600 dark:text-slate-400 text-sm sm:text-base">
+              {type === 'login' 
+                ? 'Sign in to your account to continue' 
+                : 'Join our community for mental wellness support'
+              }
+            </p>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={handleAuth} className="space-y-4 sm:space-y-6">
+            {type === 'signup' && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Username
+                </label>
+                <input
+                  type="text"
+                  placeholder="Enter your username"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-600/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-slate-900 dark:text-white placeholder:text-slate-400 transition-all duration-300"
+                />
+              </div>
+            )}
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Email
+              </label>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={e => setEmail(e.target.value)}
+                required
+                className="w-full px-4 py-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-600/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-slate-900 dark:text-white placeholder:text-slate-400 transition-all duration-300"
+              />
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                Password
+              </label>
+              <input
+                type="password"
+                placeholder="Enter your password"
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+                required
+                className="w-full px-4 py-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-600/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-slate-900 dark:text-white placeholder:text-slate-400 transition-all duration-300"
+              />
+            </div>
+            
+            {type === 'signup' && (
+              <div className="space-y-2">
+                <label className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  Confirm Password
+                </label>
+                <input
+                  type="password"
+                  placeholder="Confirm your password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  required
+                  className="w-full px-4 py-3 bg-white/60 dark:bg-slate-900/60 backdrop-blur-sm rounded-xl border border-white/30 dark:border-slate-600/30 focus:ring-2 focus:ring-purple-500/50 focus:border-purple-500/50 text-slate-900 dark:text-white placeholder:text-slate-400 transition-all duration-300"
+                />
+              </div>
+            )}
+
+            {/* Error Message */}
+            {error && (
+              <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl p-3">
+                <p className="text-red-600 dark:text-red-400 text-sm text-center">{error}</p>
+              </div>
+            )}
+
+            {/* Submit Button */}
             <button 
-              type="button"
-              onClick={handleResetPassword}
-              className="text-sm text-blue-600 hover:underline cursor-pointer"
+              type="submit" 
+              className="w-full py-3 sm:py-4 bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white rounded-xl font-semibold text-base sm:text-lg shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-0.5"
             >
-              Forgot Password?
+              {type === 'login' ? 'Sign In' : 'Create Account'}
             </button>
-          )}
-          <p className="text-center text-sm text-gray-600">
-            {type === 'login' ? "Don't have an account? " : "Already have an account? "}
-            <Link 
-              href={type === 'login' ? '/sign-up' : '/login'} 
-              className="text-blue-600 hover:underline"
-            >
-              {type === 'login' ? 'Sign up' : 'Login'}
-            </Link>
-          </p>
+
+            {/* Forgot Password */}
+            {type === 'login' && (
+              <button 
+                type="button"
+                onClick={handleResetPassword}
+                className="w-full text-sm text-slate-600 dark:text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 transition-colors duration-300"
+              >
+                Forgot your password?
+              </button>
+            )}
+
+            {/* Switch Form Link */}
+            <div className="text-center pt-4 border-t border-slate-200 dark:border-slate-700">
+              <p className="text-sm text-slate-600 dark:text-slate-400">
+                {type === 'login' ? "Don't have an account? " : "Already have an account? "}
+                <Link 
+                  href={type === 'login' ? '/sign-up' : '/login'} 
+                  className="text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 font-medium transition-colors duration-300"
+                >
+                  {type === 'login' ? 'Sign up' : 'Sign in'}
+                </Link>
+              </p>
+            </div>
+          </form>
         </div>
-        {error && (
-          <p className="text-red-600 text-sm text-center">{error}</p>
-        )}
-      </form>
+      </div>
     </div>
   )
 }
