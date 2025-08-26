@@ -33,63 +33,6 @@ This implementation adds multiple personalities to the chatbot, allowing users t
    - Style: Inspiring, imaginative, and expressive
    - Color: Pink
 
-## Technical Implementation
-
-### Backend Changes
-
-#### 1. Personalities Configuration (`ws-server/lib/ai/personalities.ts`)
-- Centralized personality definitions with prompts, avatars, and metadata
-- Type-safe personality management
-- Default personality fallback system
-
-#### 2. Enhanced Gemini AI Service (`ws-server/lib/ai/gemini.ts`)
-- Updated to accept `personalityId` parameter
-- Dynamic prompt selection based on personality
-- Maintains backward compatibility
-
-#### 3. Socket Handler Updates (`ws-server/socket.ts`)
-- Added `personality_id` to ChatMessage interface
-- Enhanced message handling to include personality context
-- Updated bot responses to use personality-specific names and avatars
-
-### Frontend Changes
-
-#### 1. Personality Selector Component (`components/PersonalitySelector.tsx`)
-- Dropdown interface for personality selection
-- Visual indicators with colors and icons
-- Animated transitions and hover effects
-- Responsive design
-
-#### 2. Enhanced Chat Component (`components/Chat.tsx`)
-- Integrated personality selector in header
-- Updated message handling for multiple personalities
-- Dynamic bot name display using shared avatar
-- Personality-aware welcome messages
-
-#### 3. Avatar System
-- All personalities use the same `/bot-avatar.jpg` image
-- Simplified avatar management without dynamic generation
-- Consistent visual representation across personalities
-
-## Database Schema Considerations
-
-The implementation assumes the following database schema updates (optional but recommended):
-
-```sql
--- Add personality_id column to ai_messages table
-ALTER TABLE ai_messages ADD COLUMN personality_id VARCHAR(50);
-
--- Create index for better query performance
-CREATE INDEX idx_ai_messages_personality ON ai_messages(personality_id);
-
--- Add user preferences table (optional)
-CREATE TABLE user_personality_preferences (
-  user_id UUID REFERENCES auth.users(id),
-  personality_id VARCHAR(50) NOT NULL,
-  created_at TIMESTAMP DEFAULT NOW(),
-  PRIMARY KEY (user_id)
-);
-```
 
 ## Usage
 
@@ -124,7 +67,7 @@ Edit the `prompt` field in the personality configuration to modify AI behavior.
 ## File Structure
 
 ```
-ws-server/
+elixir-backend/
 ├── lib/ai/
 │   ├── personalities.ts    # Personality definitions
 │   └── gemini.ts          # AI service with personality support
@@ -154,7 +97,7 @@ SUPABASE_ANON_KEY=your_supabase_anon_key
 
 1. **Start the backend server:**
 ```bash
-cd ws-server
+cd elixir-backend
 npm run dev
 ```
 
@@ -187,3 +130,4 @@ Enable debug logging by adding to socket handler:
 ```typescript
 console.log('Selected personality:', personality.id, personality.name);
 ```
+
